@@ -1,0 +1,2 @@
+#This rule helps I7565-H1H2 device create an symbolic link
+ACTION=="add", ATTRS{idVendor}=="1b5c", ATTRS{idProduct}=="0202", ATTRS{serial}=="20151007145058", RUN+="/usr/sbin/I7565H1H2_hotplug",SYMLINK+="ttyCAN0" #one I7565 device

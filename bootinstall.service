@@ -1,0 +1,10 @@
+[Unit]
+Description=I7565H1H2 driver install at boot time.
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/modprobe usbserial
+
+[Install]
+WantedBy=multi-user.target
+

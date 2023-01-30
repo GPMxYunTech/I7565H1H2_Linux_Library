@@ -1,0 +1,84 @@
+#!/bin/sh
+BLACKLIST=/etc/modprobe.d/blacklist.conf
+USB_GENERIC_NEWID=/sys/bus/usb-serial/drivers/generic/new_id
+PWD=`pwd`
+SYSTEMD_PATH='/lib/systemd/system'
+BOOTINSTALL_SERVICE='bootinstall.service'
+BOOTINSTALL_SERVICE_P="$PWD/$BOOTINSTALL_SERVICE"
+CDC_ACM=`grep cdc_acm "$BLACKLIST"`
+VENDOR='1b5c'
+H1_PRODUCT='0201'
+H2_PRODUCT='0202'
+
+if [ "$1" = 'help' ]; then
+	echo "----------------------------------------"
+	echo "usage: ./I7565H1H2_install                                Install I7565-H1/H2 module driver automatically."
+	echo "usage: ./I7565H1H2_install remove                         Remove I7565-H1/H2 driver."
+	echo "usage: ./I7565H1H2_install cdc_acm                        Remove cdc_acm from blacklist."
+	echo "usage: ./I7565H1H2_install cdc_acm-unblacklist            Install I7565-H1/H2 driver and keep cdc_acm driver"
+	echo "usage: ./I7565H1H2_install bootinstall                    Install I7565-H1/H2 driver at boot time."
+	echo "usage: ./I7565H1H2_install bootremove                     Disable bootinstall service."
+	echo "usage: ./I7565H1H2_install udev_setup                     Setup I-7565H1/H2 udev rules."
+	exit
+elif [ "$1" = 'remove' ]; then		#Remove usbserial driver.
+	modprobe -r usbserial
+	exit
+elif [ "$1" = 'cdc_acm' ]; then		#Remove cdc_acm from the blacklist.
+	sed -i '/cdc_acm/d' $BLACKLIST
+	echo unmark cdc_acm driver from blacklist success.
+	exit
+elif [ "$1" = 'bootinstall' ]; then	#Install usbserial driver at boot time.
+	cp $BOOTINSTALL_SERVICE_P $SYSTEMD_PATH
+	systemctl enable $BOOTINSTALL_SERVICE > /dev/null 2>&1
+	echo bootinstall success.
+	exit
+elif [ "$1" = 'bootremove' ]; then	#remove bootinstall.service service.
+	systemctl disable $BOOTINSTALL_SERVICE > /dev/null 2>&1
+	rm -f $SYSTEMD_PATH/$BOOTINSTALL_SERVICE
+	echo bootremove success.
+	exit
+elif [ "$1" = 'udev_setup' ]; then	#Setup I-7565H1/H2 udev rules.
+	cp 99-I7565H2.rules /etc/udev/rules.d
+	cp I7565H1H2_hotplug /usr/sbin
+	echo udev rules setup success.
+	exit
+fi
+
+#check i-7565-H1/H2 Vendor ID first
+cat `find /sys -name idVendor` | grep $VENDOR > /dev/null 2>&1
+RETURN="$?"
+if [ "$RETURN" = '1' ]; then
+	echo "No i-7565-H1/H2 found!"
+	exit;
+fi
+
+
+if [ "$1" = 'cdc_acm-unblacklist' ]; then	#do nothing
+	:
+else	#driver "cdc_acm" will probe I7565-H1/H2 device, mark it on blacklist
+	if [ "$CDC_ACM" = "" ]; then
+		echo "blacklist cdc_acm" >> $BLACKLIST
+		modprobe -r cdc_acm
+	fi
+fi
+
+#install driver "usbserial" first
+modprobe usbserial
+
+#check i-7565-H1 Product ID
+cat `find /sys -name idProduct` | grep $H1_PRODUCT > /dev/null 2>&1
+RETURN="$?"
+if [ "$RETURN" = '0' ]; then
+	echo "Install driver for i-7565-H1."
+	echo "$VENDOR $H1_PRODUCT" > $USB_GENERIC_NEWID
+fi
+
+#check i-7565-H2 Product ID
+cat `find /sys -name idProduct` | grep $H2_PRODUCT > /dev/null 2>&1
+RETURN="$?"
+if [ "$RETURN" = '0' ]; then
+	echo "Install driver for i-7565-H2."
+	echo "$VENDOR $H2_PRODUCT" > $USB_GENERIC_NEWID 
+fi
+
+echo "success."

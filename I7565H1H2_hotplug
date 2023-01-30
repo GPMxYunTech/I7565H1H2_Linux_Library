@@ -1,0 +1,24 @@
+#!/bin/bash
+#This script is only tested on Ubuntu 16.04
+
+VID='1b5c'
+I7565H1_PID='0201'
+I7565H2_PID='0202'
+
+#**********************************************************************************************************
+#One I7565 device
+CAN0_USB=`dmesg | grep 20151007145058 | tail -1 | awk -F: '{printf $1}' | awk -F" " '{printf $4}'`	#20151007145058 is I7565H1H2 device serial number
+
+if [ -n "$CAN0_USB" ]; then
+	CAN0_USB=$CAN0_USB:1.0
+	echo $CAN0_USB
+fi
+
+echo $CAN0_USB > /sys/bus/usb/drivers/cdc_acm/unbind
+
+lsmod | grep usbserial > /dev/NULL
+if [ $? == 0 ]; then
+	echo $VID $I7565H2_PID > /sys/bus/usb-serial/drivers/generic/new_id
+fi
+
+#**********************************************************************************************************

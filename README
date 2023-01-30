@@ -1,0 +1,23 @@
+1.Script "I7565H1H2_install"
+
+  This script does not support LP-8x4x device. Please refer manual to check driver install method.
+
+  [1]Install I7565-H1/H2 driver
+
+     ./I7565H1H2_install"
+
+  [2]Remove I7565-H1/H2 driver
+
+     ./I7565H1H2_install remove"
+     Remove I7565-H1/H2 driver
+
+  [3]When conneting I7565-H1/H2 device, cdc_acm driver would insmod automatic, we send it to blacklist, you can use below command to restore.
+
+     ./I7565H1H2_install cdc_acm"
+     Remove cdc_acm from blacklist.
+
+3.Compile demo i7565H1H2.c
+
+  command 'make' will generate two executable files in /examples for x86 Architecture.
+
+  command 'make LinPAC=ARM' will generate two executable files in /examples for ARM Architecture.

@@ -1,0 +1,74 @@
+The i-7565-H1/H2 Software for Linux
+v 0.4.5 2022.3.14 by Winson
+  Support ARM lib.(arm-linux-gnueabihf-gcc)
+
+v 0.4.4 2020.3.23 by Winson
+  Add boot time mount driver function in I7565H1H2_install script.
+  Add udev rule to keep cdc_acm driver when you using I7565H1H2 device.
+
+v 0.4.3 2019.2.22 by Golden
+  Fix the bug of libi7k(ver 0.8.7) function "Send_Receive_Cmd" and "Receive_Cmd".
+  The install script "I7565H1H2_install" can detect and install driver automatically for i-7565-H1/H2.
+
+v 0.4.2 2017.10.11 by Winson
+  Fix compile path in Makefile.
+
+v 0.4.1 2017.4.6 by Winson
+  Fix VCI_CloseCAN() thread problem.
+  Rename demo "i7565H1H2.a" to "i7565H1H2_a"
+  Rename demo "i7565H1H2.so" to "i7565H1H2_so"
+
+v 0.4.0 2017.3.23 by Winson
+  Fix Open CAN port fail when receive data continuously.
+
+v 0.3.8 2016.9.30 by Winson
+  Fix question that can't receive data and send data at same time.
+
+v 0.3.7 2016.07.01 by Winson
+  Add function VCI_Get_TxMsgCnt(), VCI_Clr_TxMsgBuf(), VCI_Get_TxSentCnt(), VCI_Clr_TxSentCnt()
+  Modify function VCI_Get_MODInfo().
+  Modify demo "i7565H1H2.c".
+  Modify Manual.
+
+v 0.3.6 2016.06.06 by Winson
+  Add function VCI_OpenCAN_Ex(), VCI_Get_CANBaud_BitTime(), VCI_Set_MOD_Ex().
+
+v 0.3.5 2015.08.24 by Winson
+  Add script "I7565H1H2_install" to install I7565-H1/H2 driver.
+  Modify demo i7565H1H2.c to find device file name automatic.
+  Modify Manual.
+
+v 0.3.4 2014.12.3 by Winson
+  The version of "i7k" library is "0.8.4".
+
+  fix /examples/Makefile error to support library for ARM.
+
+v 0.3.3 2014.09.4 by Winson
+  Fix /src/Makefile error to support Ubuntu.
+  Fix link error when link pthread in Ubuntu.
+  The command "make" will generated two execution file.
+  Modify Manual.
+
+v 0.3.2 2014.07.22 by Winson
+  Fix /examples/i7565H1H2.c warning from Ubuntu.
+
+v 0.3.1 2014.05.26 by Winson
+  The version of "i7k" library is "0.7.0"
+
+  Support to Ubuntu for kernel version 3.12.0.
+  Support to Linux OS 32bit and 64bit.
+
+v 0.3.0 2010.12.13 by Golden
+  The version of "i7k" library is "0.7.0".
+
+  Support 256 i7565H1/H2 modules most much at the same time.
+
+v 0.2.0 2010.04.12 by Golden
+  The version of "i7k" library is "0.5.2".
+
+  Fixed the bug that I-7565-H1/H2 send command error.
+
+v 0.1.0 2009.12.14 by Golden
+  The version of "i7k" library is "0.5.1".
+
+  Created, dirty codes.
